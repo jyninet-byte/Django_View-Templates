@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Add book{% endblock %}
+{% block content %}
+<p><a href="{% url 'book_list' %}">← All books</a></p>
+<div class="auth-wrap" style="max-width:640px">
+  <div class="card">
+    <h1>Add a book</h1>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="field {% if errors.name %}has-error{% endif %}">
+        <label for="name">Title</label>
+        <input id="name" type="text" name="name" maxlength="128" value="{{ data.name }}" required>
+        {% if errors.name %}<div class="error-text">{{ errors.name }}</div>{% endif %}
+      </div>
+      <div class="field {% if errors.description %}has-error{% endif %}">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" maxlength="256">{{ data.description }}</textarea>
+        {% if errors.description %}<div class="error-text">{{ errors.description }}</div>{% else %}<div class="hint">Up to 256 characters</div>{% endif %}
+      </div>
+      <div class="field {% if errors.count %}has-error{% endif %}" style="max-width:200px">
+        <label for="count">Number of copies</label>
+        <input id="count" type="number" name="count" min="1" value="{{ data.count }}" required>
+        {% if errors.count %}<div class="error-text">{{ errors.count }}</div>{% endif %}
+      </div>
+      <div class="field">
+        <label for="authors">Authors</label>
+        <select id="authors" name="authors" multiple>
+          {% for author in authors %}
+            <option value="{{ author.id }}" {% if author.id in selected_authors %}selected{% endif %}>{{ author.full_name }}</option>
+          {% endfor %}
+        </select>
+        <div class="hint">Hold Ctrl to select several authors. No author in the list? <a href="{% url 'author_list' %}">Add one first</a>.</div>
+      </div>
+      <button class="btn btn-primary" type="submit">Save book</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Sign up{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="card">
+    <h1>Create an account</h1>
+    <p class="muted">Join the library as a reader or as a librarian.</p>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="field {% if errors.role %}has-error{% endif %}">
+        <span class="label">I am a…</span>
+        <div class="role-picker">
+          <label class="role-option">
+            <input type="radio" name="role" value="0" {% if data.role != '1' %}checked{% endif %}>
+            <span><strong>📖 Reader</strong><small>Browse books and order them</small></span>
+          </label>
+          <label class="role-option">
+            <input type="radio" name="role" value="1" {% if data.role == '1' %}checked{% endif %}>
+            <span><strong>🗂️ Librarian</strong><small>Manage authors, users and orders</small></span>
+          </label>
+        </div>
+        {% if errors.role %}<div class="error-text">{{ errors.role }}</div>{% endif %}
+      </div>
+      <div class="field-row">
+        <div class="field {% if errors.first_name %}has-error{% endif %}">
+          <label for="first_name">First name</label>
+          <input id="first_name" type="text" name="first_name" maxlength="20" value="{{ data.first_name }}" required>
+          {% if errors.first_name %}<div class="error-text">{{ errors.first_name }}</div>{% endif %}
+        </div>
+        <div class="field {% if errors.last_name %}has-error{% endif %}">
+          <label for="last_name">Last name</label>
+          <input id="last_name" type="text" name="last_name" maxlength="20" value="{{ data.last_name }}" required>
+          {% if errors.last_name %}<div class="error-text">{{ errors.last_name }}</div>{% endif %}
+        </div>
+      </div>
+      <div class="field {% if errors.middle_name %}has-error{% endif %}">
+        <label for="middle_name">Middle name <span class="muted">(optional)</span></label>
+        <input id="middle_name" type="text" name="middle_name" maxlength="20" value="{{ data.middle_name }}">
+        {% if errors.middle_name %}<div class="error-text">{{ errors.middle_name }}</div>{% endif %}
+      </div>
+      <div class="field {% if errors.email %}has-error{% endif %}">
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email" maxlength="100" value="{{ data.email }}" required>
+        {% if errors.email %}<div class="error-text">{{ errors.email }}</div>{% endif %}
+      </div>
+      <div class="field-row">
+        <div class="field {% if errors.password %}has-error{% endif %}">
+          <label for="password">Password</label>
+          <input id="password" type="password" name="password" minlength="6" required>
+          {% if errors.password %}<div class="error-text">{{ errors.password }}</div>{% else %}<div class="hint">At least 6 characters</div>{% endif %}
+        </div>
+        <div class="field {% if errors.password2 %}has-error{% endif %}">
+          <label for="password2">Repeat password</label>
+          <input id="password2" type="password" name="password2" required>
+          {% if errors.password2 %}<div class="error-text">{{ errors.password2 }}</div>{% endif %}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+    </form>
+  </div>
+  <p class="auth-switch">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+</div>
+{% endblock %}
